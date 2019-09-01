@@ -15,4 +15,4 @@ spring:
       max-connections: 100
 
   #jms:
-    #pub-sub-domain: true
+    #pub-sub-domain: true  #true： 发布订阅 ，false 点对点  缺省值：false
