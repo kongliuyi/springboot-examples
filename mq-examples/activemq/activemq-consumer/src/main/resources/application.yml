@@ -1,0 +1,18 @@
+server:
+  port: 8081
+
+
+# ActiveMQ
+spring:
+  application:
+    name: activemq-consumer
+  activemq:
+    broker-url: tcp://127.0.0.1:61616
+    user: admin
+    password: admin
+    pool:
+      enabled: true
+      max-connections: 100
+
+  #jms:
+    #pub-sub-domain: true
