@@ -40,7 +40,7 @@
 2. 消息ttl过期
 3. 队列达到最大的长度
 
-![死信队列](../docs/mq-examples/rabbitmq-dead-queue.png)
+![死信队列](.../docs/mq-examples/rabbitmq-dead-queue.png)
 
 
 
