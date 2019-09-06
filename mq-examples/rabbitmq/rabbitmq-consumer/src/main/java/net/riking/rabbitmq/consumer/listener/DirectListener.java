@@ -3,8 +3,6 @@ package net.riking.rabbitmq.consumer.listener;
 import com.rabbitmq.client.Channel;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.*;
-import org.springframework.amqp.support.AmqpHeaders;
-import org.springframework.messaging.handler.annotation.Headers;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -22,16 +20,14 @@ public class DirectListener {
 
     /**
      * 1.有消息被拒绝
-     * @param message
-     * @throws Exception
      */
-    @RabbitListener(queues = "direct.error")
+    @RabbitListener(bindings = {@QueueBinding(value = @Queue(value = "direct.refuse.queue"), exchange = @Exchange(value = "direct.refuse.exchange"), key = {"direct.refuse.routingKey"})})
     @RabbitHandler
-    public void processRetryByException(Map<String,Object> map, Message message, Channel channel) throws IOException {
-        System.out.println("direct.error:"+message.toString());
+    public void processByRefuse(Map<String,Object> map, Message message, Channel channel) throws IOException {
+        System.out.println("direct.refuse.queue:"+map.toString());
         long tag=message.getMessageProperties().getDeliveryTag();
         try {
-            long result=1/(long) map.get("id");;
+            long result=1/(long) map.get("id");
             System.out.println("result:" + result);
             channel.basicAck(tag, false);
         }catch (Exception e){
@@ -42,13 +38,45 @@ public class DirectListener {
     }
 
 
-    /**
+    /**1.有消息被拒绝
      * 死信队列消费者
-     * @param message
      */
-    @RabbitListener(bindings = {@QueueBinding(value = @Queue(value = "direct.dead"), exchange = @Exchange(value = "deadDirectExchange"), key = {"direct.routingKey.dead"})})
+    @RabbitListener(bindings = {@QueueBinding(value = @Queue(value = "x.direct.refuse.queue"), exchange = @Exchange(value = "x.direct.refuse.exchange"), key = {"x.direct.refuse.routingKey"})})
     @RabbitHandler
-    public void processDeadByException(Map<String,Object> message)  {
-        System.out.println("direct.dead:"+message.toString());
+    public void processDeadByRefuse(Map<String,Object> map, Message message, Channel channel) throws IOException {
+        System.out.println("x.direct.refuse.queue:"+map.toString());
+        long tag=message.getMessageProperties().getDeliveryTag();
+        channel.basicAck(tag, false);
     }
+
+
+
+    /**
+     * 3.消息TTL过期
+     */
+    @RabbitListener(bindings = {@QueueBinding(value = @Queue(value = "direct.delay.queue"), exchange = @Exchange(value = "direct.delay.exchange"), key = {"direct.delay.routingKey"})})
+    @RabbitHandler
+    public void processByDelay(Map<String,Object> map, Message message, Channel channel) throws Exception {
+        System.out.println("direct.delay.queue:"+map.toString());
+        channel.basicQos(1);// 保证一次只分发一次
+        long times= (long) map.get("times");
+        // 模拟执行任务,时间5秒
+          Thread.sleep(times);
+        channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
+    }
+
+
+    /**3.消息TTL过期
+     * 死信队列消费者
+     */
+    @RabbitListener(bindings = {@QueueBinding(value = @Queue(value = "x.direct.delay.queue"), exchange = @Exchange(value = "x.direct.delay.exchange"), key = {"x.direct.delay.routingKey"})})
+    @RabbitHandler
+    public void processDeadByDelay(Map<String,Object> map, Message message, Channel channel) throws IOException {
+        System.out.println("x.direct.delay.queue:"+map.toString());
+        long tag=message.getMessageProperties().getDeliveryTag();
+        channel.basicAck(tag, false);
+    }
+
+
+
 }
