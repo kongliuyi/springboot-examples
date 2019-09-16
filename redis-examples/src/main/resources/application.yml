@@ -1,0 +1,38 @@
+server:
+  port: 8080
+
+
+
+spring:
+  application:
+    name: redis-examples
+  redis:
+    host: ${REDIS_HOST:192.168.36.130}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:123456}
+    database: 0
+    lettuce:
+      pool:
+        max-active: 32
+        max-wait: 300
+        max-idle: 16
+        min-idle: 8
+
+
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.36.130:3306/redis?characterEncoding=UTF-8
+    username: root
+    password: 123456
+
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: 0 # 0为AUTO
+      logic-delete-value: "Y" # 逻辑已删除值(默认为 Y)
+      logic-not-delete-value: "N" # 逻辑未删除值(默认为 N)
+
