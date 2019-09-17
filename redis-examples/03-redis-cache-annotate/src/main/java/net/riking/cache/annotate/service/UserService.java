@@ -1,14 +1,12 @@
-package net.riking.redis.service;
+package net.riking.cache.annotate.service;
 
 
-import net.riking.redis.entity.User;
-
-import java.util.List;
+import net.riking.cache.annotate.entity.User;
 
 public interface   UserService {
+
       /**
        * 获取用户
-       *
        * @param id
        * @return
        */

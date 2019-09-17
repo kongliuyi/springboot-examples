@@ -1,8 +1,8 @@
-package net.riking.redis.dao;
+package net.riking.cache.annotate.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
-import net.riking.redis.entity.User;
+import net.riking.cache.annotate.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 

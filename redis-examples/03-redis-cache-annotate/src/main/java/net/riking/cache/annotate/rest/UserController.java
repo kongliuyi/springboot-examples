@@ -1,16 +1,13 @@
-package net.riking.redis.rest;
+package net.riking.cache.annotate.rest;
 
 
 import lombok.extern.slf4j.Slf4j;
-import net.riking.redis.entity.User;
-import net.riking.redis.service.UserService;
 
+import net.riking.cache.annotate.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
-
-
 import org.springframework.web.bind.annotation.*;
 
-
+import net.riking.cache.annotate.service.UserService;
 
 
 @RestController

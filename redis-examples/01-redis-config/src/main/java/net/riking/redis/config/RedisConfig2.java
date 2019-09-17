@@ -16,6 +16,7 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 
 import java.time.Duration;
+
 /**
  * @Description 如要测试本配置类，则注释掉 {@link RedisConfig }
  * @Author kongLiuYi

@@ -1,16 +1,16 @@
-package net.riking.redis.service.impl;
+package net.riking.cache.annotate.service.impl;
+
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import net.riking.redis.dao.UserMapper;
-import net.riking.redis.entity.User;
-import net.riking.redis.service.UserService;
+import net.riking.cache.annotate.dao.UserMapper;
+import net.riking.cache.annotate.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
+
+import net.riking.cache.annotate.service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService {
