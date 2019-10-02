@@ -11,6 +11,7 @@
     <modules>
         <module>mq-examples</module>
         <module>redis-examples</module>
+        <module>task-scheduling</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -1,0 +1,21 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: xxl-job-executor
+
+
+
+# xxl-job
+xxl:
+  job:
+    admin:
+      addresses: http://127.0.0.1:8080/xxl-job-admin
+    executor:
+      appname: xxl-job-executor
+      ip:
+      port: 9999
+      logpath: /xxl-job/logs/xxl-job/
+      logretentiondays: 1
+    accessToken:
