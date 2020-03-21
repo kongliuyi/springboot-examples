@@ -31,7 +31,7 @@ public class User implements Serializable {
     private Boolean accountNonExpired;
     private Boolean credentialsNonExpired;
     private Boolean accountNonLocked;
-  //  @TableLogic
+    //  @TableLogic
     private String deleted = "N";
 }
 

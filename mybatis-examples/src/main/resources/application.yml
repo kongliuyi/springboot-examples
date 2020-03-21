@@ -1,0 +1,19 @@
+server:
+  port: 8080
+
+
+spring:
+  application:
+    name: mybatis-examples
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/oauth?characterEncoding=UTF-8
+    username: root
+    password: woaini520
+
+
+mybatis:
+  type-aliases-package: net.riking.mybatis.entity
+
+
