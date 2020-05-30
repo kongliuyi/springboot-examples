@@ -1,4 +1,4 @@
-package net.riking.swagger;
+package net.riking.swagger.bootstrap.ui;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,14 +8,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.spring.web.SpringfoxWebMvcConfiguration;
 
 /**
+ * 快速上手：https://my.oschina.net/java1314/blog/3023010
+ * 官方文档 API 地址：https://doc.xiaominfo.com/guide/
  * @author Administrator
  */
 @SpringBootApplication
 @ConditionalOnClass(SpringfoxWebMvcConfiguration.class)
-public class SwaggerBootstrapUiDemoApplication implements WebMvcConfigurer {
+public class SwaggerBootstrapUiApplication implements WebMvcConfigurer {
 
     public static void main(String[] args) {
-        SpringApplication.run(SwaggerBootstrapUiDemoApplication.class, args);
+        SpringApplication.run(SwaggerBootstrapUiApplication.class, args);
     }
 
     @Override

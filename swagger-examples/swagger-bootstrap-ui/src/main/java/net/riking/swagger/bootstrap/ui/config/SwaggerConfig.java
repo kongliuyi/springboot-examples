@@ -1,4 +1,4 @@
-package net.riking.swagger.config;
+package net.riking.swagger.bootstrap.ui.config;
 
 import com.github.xiaoymin.swaggerbootstrapui.annotations.EnableSwaggerBootstrapUI;
 import org.springframework.context.annotation.Bean;
@@ -13,8 +13,9 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
- * 第三方swagger增强API注解
- *
+ * @Description 第三方swagger增强API注解
+ * @Author: kongLiuYi
+ * @Date: 2020/5/30 0030 17:44
  */
 @Configuration
 @EnableSwagger2
@@ -24,7 +25,7 @@ public class SwaggerConfig {
     public Docket createRestApi() {
         /**
          * @Author
-         * @Description 关于分组接口,可后期根据多模块,拆解为根据模块来管理API文档
+         * @Description 关于分组接口, 可后期根据多模块, 拆解为根据模块来管理API文档
          * @Date 10:18 2019/3/15
          * @Param []
          * @return springfox.documentation.spring.web.plugins.Docket

@@ -1,16 +1,21 @@
-package net.riking.swagger.rest;
+package net.riking.swagger.knife4j.rest;
 
 
+import com.github.xiaoymin.knife4j.annotations.DynamicParameter;
+import com.github.xiaoymin.knife4j.annotations.DynamicParameters;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.DynamicParameter;
-import io.swagger.annotations.DynamicParameters;
 import lombok.extern.slf4j.Slf4j;
-import net.riking.swagger.entity.User;
+import net.riking.swagger.knife4j.entity.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+/**
+ * @Description 用户管理
+ * @Author: kongLiuYi
+ * @Date: 2020/5/30 0030 17:44
+ */
 @Api(tags = "用户管理", position = 1)
 @RestController
 @RequestMapping("/user")
