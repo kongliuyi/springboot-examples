@@ -1,4 +1,4 @@
-package net.riking.rabbitmq.producer.config;
+package net.riking.rabbitmq.config;
 
 /**
  *   队列标识符

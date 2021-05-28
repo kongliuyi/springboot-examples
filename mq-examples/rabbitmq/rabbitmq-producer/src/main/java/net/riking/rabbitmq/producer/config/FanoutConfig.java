@@ -1,5 +1,6 @@
 package net.riking.rabbitmq.producer.config;
 
+import net.riking.rabbitmq.enums.QueueEnum;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.FanoutExchange;
@@ -10,42 +11,45 @@ import org.springframework.stereotype.Component;
 @Component
 public class FanoutConfig {
 
-	// 邮件队列
-	public  final static String FANOUT_EMAIL_QUEUE = "fanout.mail";
 
-	// 短信队列
-	public  final static String FANOUT_SMS_QUEUE = "fanout.sms";
+    /**
+     * 1.定义邮件队列
+     */
+    @Bean
+    public Queue fanOutEmailQueue() {
+        return new Queue(QueueEnum.FANOUT_EMAIL_QUEUE.getQueue());
+    }
 
-	// 交换机名称-主题交换机
-	public  final static String EXCHANGE_NAME = "fanoutExchange";
 
-	// 1.定义邮件队列
-	@Bean
-	public Queue fanOutEamilQueue() {
-		return new Queue(FANOUT_EMAIL_QUEUE);
-	}
+    /**
+     * 2.定义短信队列
+     */
+    @Bean
+    public Queue fanOutSmsQueue() {
+        return new Queue(QueueEnum.FANOUT_SMS_QUEUE.getQueue());
+    }
 
-	// 2.定义短信队列
-	@Bean
-	public Queue fanOutSmsQueue() {
-		return new Queue(FANOUT_SMS_QUEUE);
-	}
+    /**
+     * 3.定义交换机
+     */
+    @Bean
+    FanoutExchange fanoutExchange() {
+        return new FanoutExchange(QueueEnum.FANOUT_EMAIL_QUEUE.getExchange());
+    }
 
-	// 3.定义交换机
-	@Bean
-	FanoutExchange fanoutExchange() {
-		return new FanoutExchange(EXCHANGE_NAME);
-	}
+    /**
+     * 4.邮件队列与交换机绑定
+     */
+    @Bean
+    Binding bindingExchangeEmail(Queue fanOutEmailQueue, FanoutExchange fanoutExchange) {
+        return BindingBuilder.bind(fanOutEmailQueue).to(fanoutExchange);
+    }
 
-	// 4.邮件队列与交换机绑定
-	@Bean
-	Binding bindingExchangeEamil(Queue fanOutEamilQueue, FanoutExchange fanoutExchange) {
-		return BindingBuilder.bind(fanOutEamilQueue).to(fanoutExchange);
-	}
-
-	// 5.短信队列与交换机绑定
-	@Bean
-	Binding bindingExchangeSms(Queue fanOutSmsQueue, FanoutExchange fanoutExchange) {
-		return BindingBuilder.bind(fanOutSmsQueue).to(fanoutExchange);
-	}
+    /**
+     * 5.短信队列与交换机绑定
+     */
+    @Bean
+    Binding bindingExchangeSms(Queue fanOutSmsQueue, FanoutExchange fanoutExchange) {
+        return BindingBuilder.bind(fanOutSmsQueue).to(fanoutExchange);
+    }
 }

@@ -1,80 +1,98 @@
 package net.riking.rabbitmq.producer.config;
 
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.DirectExchange;
-import org.springframework.amqp.core.Queue;
+import net.riking.rabbitmq.config.ArgumentsConfig;
+import net.riking.rabbitmq.enums.QueueEnum;
+import org.springframework.amqp.core.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
 
 /**
- * 使用路由模式验证 　消息TTL过期－死信队列
+ * @Description:
+ * 使用路由模式验证 　消息TTL过期－> 死信队列 = 延迟队列
+ * 当队列中消息设置 TTL 并不进行消费，则可以组成延迟队列
+ * 延迟队列在我们的项目中可以应用于很多场景，如：下单后两个消息取消订单，七天自动收货，七天自动好评，密码冻结后24小时解冻等
+ * @Author: kongLiuYi
+ * @Date: 2021/5/27 0029 21:24
  */
 @Component
 public class DirectDelayConfig {
 
-    /**
-     * 定义正常队列相关信息
-     */
-    public  final static String  EXCHANGE_NAME = "direct.delay.exchange";
-    private final static String  DIRECT_QUEUE = "direct.delay.queue";
-    private  final static String DIRECT_ROUTING_KEY = "direct.delay.routingKey";
-
 
     /**
-     * 定义死信队列相关信息
+     * 1.交换机
+     *
+     * @return DirectExchange
      */
-    private final static String X_DELAY_EXCHANGE_NAME = "x.direct.delay.exchange";
-    private final static String X_DELAY_QUEUE = "x.direct.delay.queue";
-    private final static String X_DELAY_ROUTING_KEY = "x.direct.delay.routingKey";
-
-
-
-    // 1.交换机
     @Bean
-    DirectExchange directDelayExchange(){
-        return  new DirectExchange(EXCHANGE_NAME);
+    DirectExchange delayExchange() {
+        return new DirectExchange(QueueEnum.DELAY_DIRECT_QUEUE.getExchange());
     }
 
-    @Bean
-    public Queue directDelayQueue() {
-        //死信队列配置信息，与DIRECT_QUEUE队列进行绑定
-        Map<String, Object> args = new HashMap<>(3);
-        //声明死信交换器
-        args.put(ArgumentsConfig.X_DEAD_LETTER_EXCHANGE, X_DELAY_EXCHANGE_NAME);
-        //声明死信路由键
-        args.put(ArgumentsConfig.X_DEAD_LETTER__ROUTING_KEY, X_DELAY_ROUTING_KEY);
-        //声明队列消息过期时间
-        args.put(ArgumentsConfig.X_MESSAGE_TTL, 10000);
-        return new Queue(DIRECT_QUEUE, true, false, false, args);
-    }
-
-    // 3.队列与交换机绑定
-    @Bean
-    Binding bindingExchangeDirectDelay(Queue directDelayQueue, DirectExchange directDelayExchange) {
-        return  BindingBuilder.bind(directDelayQueue).to(directDelayExchange).with(DIRECT_ROUTING_KEY);
-    }
-
-
-    //1.配置死信队列
+    /**
+     * 2.队列
+     *
+     * @return Queue
+     */
     @Bean
     public Queue delayQueue() {
-        return new Queue(X_DELAY_QUEUE, true);
+        // 死信队列配置信息，与 DIRECT_QUEUE 队列进行绑定
+        return QueueBuilder
+                .durable(QueueEnum.DELAY_DIRECT_QUEUE.getQueue())
+                // 配置到期后转发的交换器
+                .withArgument(ArgumentsConfig.X_DEAD_LETTER_EXCHANGE, QueueEnum.X_DELAY_DIRECT_QUEUE.getExchange())
+                // 配置到期后转发的路由键
+                .withArgument(ArgumentsConfig.X_DEAD_LETTER__ROUTING_KEY, QueueEnum.X_DELAY_DIRECT_QUEUE.getRouteKey())
+                //.withArgument(ArgumentsConfig.X_MESSAGE_TTL, 10000)
+                .build();
     }
 
-    //2.配置死信交换机
+
+    /**
+     * 3.队列与交换机绑定
+     *
+     * @param delayQueue /
+     * @param delayExchange /
+     * @return Binding
+     */
     @Bean
-    public DirectExchange delayExchange() {
-        return new DirectExchange(X_DELAY_EXCHANGE_NAME);
+    Binding delayBinding(Queue delayQueue, DirectExchange delayExchange) {
+        return BindingBuilder.bind(delayQueue).to(delayExchange).with(QueueEnum.DELAY_DIRECT_QUEUE.getRouteKey());
     }
 
-    //3.配置死信交换机与死信队列绑定
+
+    /**
+     * 1.配置死信交换机
+     *
+     * @return DirectExchange
+     */
     @Bean
-    public Binding bindingDelayExchange(Queue delayQueue, DirectExchange delayExchange) {
-        return BindingBuilder.bind(delayQueue).to(delayExchange).with(X_DELAY_ROUTING_KEY);
+    public DirectExchange xDelayExchange() {
+        return new DirectExchange(QueueEnum.X_DELAY_DIRECT_QUEUE.getExchange());
+    }
+
+
+    /**
+     * 2.配置死信队列
+     *
+     * @return Queue
+     */
+    @Bean
+    public Queue xDelayQueue() {
+        return new Queue(QueueEnum.X_DELAY_DIRECT_QUEUE.getQueue(), true);
+    }
+
+
+    /**
+     * 3.配置死信交换机与死信队列绑定
+     *
+     * @param xDelayQueue    死信队列
+     * @param xDelayExchange 死信交换机
+     * @return Binding
+     */
+    @Bean
+    public Binding xDelayBinding(Queue xDelayQueue, DirectExchange xDelayExchange) {
+        return BindingBuilder.bind(xDelayQueue).to(xDelayExchange).with(QueueEnum.X_DELAY_DIRECT_QUEUE.getRouteKey());
     }
 
 
