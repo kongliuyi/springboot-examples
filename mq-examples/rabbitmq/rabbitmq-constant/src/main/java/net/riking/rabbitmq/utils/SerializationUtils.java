@@ -24,7 +24,7 @@ public class SerializationUtils {
 
         try (
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                ObjectOutputStream out = new ObjectOutputStream(byteArrayOutputStream);
+                ObjectOutputStream out = new ObjectOutputStream(byteArrayOutputStream)
         ) {
 
             out.writeObject(obj);
@@ -38,8 +38,8 @@ public class SerializationUtils {
      *
      * @param bytes 对象序列化后的字节数组
      * @return 反序列化后的对象
-     * @throws IOException
-     * @throws ClassNotFoundException
+     * @throws IOException /
+     * @throws ClassNotFoundException /
      */
     public static Object deserialize(byte[] bytes) throws IOException, ClassNotFoundException {
         if (null == bytes) {
@@ -48,7 +48,7 @@ public class SerializationUtils {
 
         try (
                 ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
-                ObjectInputStream in = new ObjectInputStream(byteArrayInputStream);
+                ObjectInputStream in = new ObjectInputStream(byteArrayInputStream)
         ) {
 
             return in.readObject();
@@ -61,8 +61,8 @@ public class SerializationUtils {
      * @param bytes 对象序列化后的字节数组
      * @param c     反序列化后的对象类型
      * @return 指定类型的对象
-     * @throws IOException
-     * @throws ClassNotFoundException
+     * @throws IOException /
+     * @throws ClassNotFoundException /
      */
     public static <T> T deserialize(byte[] bytes, Class<T> c) throws ClassNotFoundException, IOException {
         return c.cast(deserialize(bytes));
@@ -70,7 +70,7 @@ public class SerializationUtils {
 
     public static void main(String[] args) {
         try {
-            Map<String, Object> map = new HashMap<>();
+            Map<String, Object> map = new HashMap<>(4);
             map.put("name", "Logan");
             map.put("age", 26);
 
