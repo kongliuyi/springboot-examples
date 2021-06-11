@@ -1,10 +1,6 @@
 package net.riking.rabbitmq.utils;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,13 +8,12 @@ import java.util.Map;
  * 序列化工具类
  *
  * @author kongliuyi
- *
  */
 public class SerializationUtils {
 
     /**
      * 序列化对象
-     * 
+     *
      * @param obj 对象
      * @return 序列化后的字节数组
      */
@@ -40,7 +35,7 @@ public class SerializationUtils {
 
     /**
      * 反序列化
-     * 
+     *
      * @param bytes 对象序列化后的字节数组
      * @return 反序列化后的对象
      * @throws IOException
@@ -62,9 +57,9 @@ public class SerializationUtils {
 
     /**
      * 反序列化成指定类型的对象
-     * 
+     *
      * @param bytes 对象序列化后的字节数组
-     * @param c 反序列化后的对象类型
+     * @param c     反序列化后的对象类型
      * @return 指定类型的对象
      * @throws IOException
      * @throws ClassNotFoundException
