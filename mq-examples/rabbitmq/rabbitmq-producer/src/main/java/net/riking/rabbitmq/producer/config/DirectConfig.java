@@ -44,7 +44,7 @@ public class DirectConfig {
      */
     @Bean
     Binding bindingExchangeDirect(Queue directQueue, DirectExchange directExchange) {
-        return BindingBuilder.bind(directQueue).to(directExchange).with(QueueEnum.DIRECT_QUEUE.getRouteKey());
+        return BindingBuilder.bind(directQueue).to(directExchange).with(QueueEnum.DIRECT_QUEUE.getRoutingKey());
     }
 
 }

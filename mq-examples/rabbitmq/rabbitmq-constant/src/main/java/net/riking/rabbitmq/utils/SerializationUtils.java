@@ -10,9 +10,8 @@ import java.util.Map;
 
 /**
  * 序列化工具类
- * 
- * @author Logan
- * @version 1.0.0
+ *
+ * @author kongliuyi
  *
  */
 public class SerializationUtils {
@@ -22,7 +21,6 @@ public class SerializationUtils {
      * 
      * @param obj 对象
      * @return 序列化后的字节数组
-     * @throws IOException
      */
     public static byte[] serialize(Object obj) throws IOException {
         if (null == obj) {

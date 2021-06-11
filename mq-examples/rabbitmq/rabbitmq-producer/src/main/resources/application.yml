@@ -6,14 +6,17 @@ spring:
   application:
     name: rabbitmq-producer
   rabbitmq:
-    ####连接地址
-    host: 192.168.177.129
-    ####端口号
+    # 连接地址
+    host: 106.14.47.185
+    # 端口号
     port: 5672
-    ####账号
-    username: admin
-    ####密码
-    password: admin
-    ### 地址
+    # 账号
+    username: guest
+    # 密码
+    password: guest
+    # 地址
     virtual-host: /virtual_host
+    # 生产者方开启消息确认的配置
+    publisher-confirms: true
+    publisher-returns: true
 

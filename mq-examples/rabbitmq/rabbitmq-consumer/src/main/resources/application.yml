@@ -6,25 +6,25 @@ spring:
   application:
     name: rabbitmq-consumer
   rabbitmq:
-    #连接地址
-    host: 192.168.177.129
-    #端口号
+    # 连接地址
+    host: 106.14.47.185
+    # 端口号
     port: 5672
-    #账号
-    username: admin
-    ##密码
-    password: admin
+    # 账号
+    username: guest
+    # 密码
+    password: guest
     # 地址
     virtual-host: /virtual_host
     listener:
       simple:
         retry:
-          #开启消费者重试
+          # 开启消费者重试
           enabled: true
-          #最大重试次数
+          # 最大重试次数
           max-attempts: 5
-          #重试间隔次数
+          # 重试间隔次数
           initial-interval: 3000
-          #开启手动ack
+          # 开启手动 ack
         acknowledge-mode: manual
 

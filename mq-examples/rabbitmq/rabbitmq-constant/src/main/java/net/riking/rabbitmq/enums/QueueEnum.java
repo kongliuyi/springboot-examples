@@ -16,35 +16,39 @@ public enum QueueEnum {
     /**
      * 消息通知队列
      */
-    DIRECT_QUEUE("direct.exchange", "direct.queue", "direct.routeKey"),
+    DIRECT_QUEUE("direct.exchange", "direct.queue", "direct.routingKey"),
 
     /**
      * 消息 ttl 延迟队列
      */
-    DELAY_DIRECT_QUEUE("delay.direct.exchange", "delay.direct.queue", "delay.direct.routeKey"),
+    DELAY_DIRECT_QUEUE("delay.direct.exchange", "delay.direct.queue", "delay.direct.routingKey"),
     /**
-     * 消息 ttl 延迟队列
+     * 延迟队列 = 消息 ttl + 死信队列
      */
-    X_DELAY_DIRECT_QUEUE("x.delay.direct.exchange", "x.delay.direct.queue", "x.delay.direct.routeKey"),
+    X_DELAY_DIRECT_QUEUE("x.delay.direct.exchange", "x.delay.direct.queue", "x.delay.direct.routingKey"),
+    /**
+     * 延迟队列 = 插件形式
+     */
+    X_DELAY_PLUGIN_DIRECT_QUEUE("x.delay.plugin.direct.exchange", "x.delay.plugin.direct.queue", "x.delay.plugin.direct.routingKey"),
+
+    /**
+     * 拒绝队列
+     */
+    REFUSE_DIRECT_QUEUE("refuse.direct.exchange", "refuse.direct.queue", "refuse.direct.routingKey"),
+
+    /**
+     * 拒绝队列 + 死信队列
+     */
+    X_REFUSE_DIRECT_QUEUE("x.refuse.direct.exchange", "x.refuse.direct.queue", "x.refuse.direct.routingKey"),
 
     /**
      * 消息 ttl 延迟队列
      */
-    REFUSE_DIRECT_QUEUE("refuse.direct.exchange", "refuse.direct.queue", "refuse.direct.routeKey"),
-
+    TOPIC_ERROR_QUEUE("topic.exchange", "error.topic.queue", "error.*.topic.routingKey"),
     /**
      * 消息 ttl 延迟队列
      */
-    X_REFUSE_DIRECT_QUEUE("x.refuse.direct.exchange", "x.refuse.direct.queue", "x.refuse.direct.routeKey"),
-
-    /**
-     * 消息 ttl 延迟队列
-     */
-    TOPIC_ERROR_QUEUE("topic.exchange", "error.topic.queue", "error.*.topic.routeKey"),
-    /**
-     * 消息 ttl 延迟队列
-     */
-    TOPIC_INFO_QUEUE("topic.exchange", "info.topic.queue", "info.#.topic.routeKey");
+    TOPIC_INFO_QUEUE("topic.exchange", "info.topic.queue", "info.#.topic.routingKey");
 
     /**
      * 交换名称
@@ -57,11 +61,11 @@ public enum QueueEnum {
     /**
      * 路由键
      */
-    private String routeKey;
+    private String routingKey;
 
-    QueueEnum(String exchange, String queue, String routeKey) {
+    QueueEnum(String exchange, String queue, String routingKey) {
         this.exchange = exchange;
         this.queue = queue;
-        this.routeKey = routeKey;
+        this.routingKey = routingKey;
     }
 }

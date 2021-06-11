@@ -41,6 +41,12 @@ public interface ArgumentsConfig {
     String X_MAX_PRIORITY="x-max-priority";
 
 
+    /**
+     * 死信交换机类型
+     */
+    String X_DELAYED_TYPE="x-delayed-type";
+
+
 
 
 

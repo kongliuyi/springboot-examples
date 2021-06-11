@@ -42,7 +42,7 @@ public class DirectDelayConfig {
                 // 配置到期后转发的交换器
                 .withArgument(ArgumentsConfig.X_DEAD_LETTER_EXCHANGE, QueueEnum.X_DELAY_DIRECT_QUEUE.getExchange())
                 // 配置到期后转发的路由键
-                .withArgument(ArgumentsConfig.X_DEAD_LETTER__ROUTING_KEY, QueueEnum.X_DELAY_DIRECT_QUEUE.getRouteKey())
+                .withArgument(ArgumentsConfig.X_DEAD_LETTER__ROUTING_KEY, QueueEnum.X_DELAY_DIRECT_QUEUE.getRoutingKey())
                 //.withArgument(ArgumentsConfig.X_MESSAGE_TTL, 10000)
                 .build();
     }
@@ -57,7 +57,7 @@ public class DirectDelayConfig {
      */
     @Bean
     Binding delayBinding(Queue delayQueue, DirectExchange delayExchange) {
-        return BindingBuilder.bind(delayQueue).to(delayExchange).with(QueueEnum.DELAY_DIRECT_QUEUE.getRouteKey());
+        return BindingBuilder.bind(delayQueue).to(delayExchange).with(QueueEnum.DELAY_DIRECT_QUEUE.getRoutingKey());
     }
 
 
@@ -92,7 +92,7 @@ public class DirectDelayConfig {
      */
     @Bean
     public Binding xDelayBinding(Queue xDelayQueue, DirectExchange xDelayExchange) {
-        return BindingBuilder.bind(xDelayQueue).to(xDelayExchange).with(QueueEnum.X_DELAY_DIRECT_QUEUE.getRouteKey());
+        return BindingBuilder.bind(xDelayQueue).to(xDelayExchange).with(QueueEnum.X_DELAY_DIRECT_QUEUE.getRoutingKey());
     }
 
 
