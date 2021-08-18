@@ -23,12 +23,14 @@ import java.util.Random;
 @Slf4j
 public class TopicListener {
 
+
     /**
-     * 在不开启手动签收时
-     * 建议：该方式不建议重试，应设置死信队列或者其他补偿机制
+     * Topic 消费消息，在不开启手动签收时
      *
-     * @param message
-     * @throws Exception
+     * @param messageVo 消息
+     * @param message   消息
+     * @param channel   /
+     * @throws IOException /
      */
     @RabbitListener(queues = "topic.message.queue")
     @RabbitHandler
@@ -39,13 +41,14 @@ public class TopicListener {
     }
 
 
-
     /**
-     * 在不开启手动签收时
+     * Topic 消费消息，在不开启手动签收时
      * 建议：该方式不建议重试，应设置死信队列或者其他补偿机制
      *
-     * @param message
-     * @throws Exception
+     * @param messageVo 消息
+     * @param message   消息
+     * @param channel   /
+     * @throws IOException /
      */
     @RabbitListener(queues = "topic.retry.error")
     @RabbitHandler
@@ -61,10 +64,13 @@ public class TopicListener {
     }
 
     /**
+     * Topic 消费消息，在不开启手动签收时
      * 建议：由于网络原因,可以重试
      *
-     * @param message
-     * @throws Exception
+     * @param messageVo 消息
+     * @param message   消息
+     * @param channel   /
+     * @throws IOException /
      */
     @RabbitListener(queues = "topic.retry.info")
     @RabbitHandler
