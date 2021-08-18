@@ -66,15 +66,15 @@ public class ProducerController {
 
 
     /**
-     * 验证 Direct
+     * 验证 Direct、topic
      *
      * @param exchange   交换器
      * @param routingKey 队列交换绑定的路由键
      * @param count      发送次数
      * @return success
      */
-    @GetMapping("/sendDirect/{exchange}/{routingKey}/{count}")
-    public String sendDirect(@PathVariable String exchange, @PathVariable String routingKey, @PathVariable Integer count) {
+    @GetMapping("/send/{exchange}/{routingKey}/{count}")
+    public String send(@PathVariable String exchange, @PathVariable String routingKey, @PathVariable Integer count) {
         log.info("发送 direct: exchange:{},routingKey:{}，count:{}", exchange, routingKey, count);
         String uuid = String.valueOf(UUID.randomUUID());
         for (int i = 0; i < count; i++) {
