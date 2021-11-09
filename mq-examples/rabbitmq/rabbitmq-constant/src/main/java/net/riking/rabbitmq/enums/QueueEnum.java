@@ -44,11 +44,15 @@ public enum QueueEnum {
     /**
      * 消息 ttl 延迟队列
      */
-    TOPIC_ERROR_QUEUE("topic.exchange", "error.topic.queue", "error.*.topic.routingKey"),
+    TOPIC_ERROR_QUEUE("topic.exchange", "topic.retry.error", "error.*"),
     /**
      * 消息 ttl 延迟队列
      */
-    TOPIC_INFO_QUEUE("topic.exchange", "info.topic.queue", "info.#.topic.routingKey");
+    TOPIC_INFO_QUEUE("topic.exchange", "topic.retry.info", "info.*"),
+    /**
+     * 消息 ttl 延迟队列
+     */
+    TOPIC_QUEUE("topic.exchange", "topic.message", "topic.message.*");
 
     /**
      * 交换名称

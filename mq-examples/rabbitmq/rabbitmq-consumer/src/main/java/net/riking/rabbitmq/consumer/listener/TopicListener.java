@@ -32,7 +32,7 @@ public class TopicListener {
      * @param channel   /
      * @throws IOException /
      */
-    @RabbitListener(queues = "topic.message.queue")
+    @RabbitListener(queues = "topic.message")
     @RabbitHandler
     public void process(MessageVo messageVo, Message message, Channel channel) throws IOException {
         log.info("topic.message.queue:{}", messageVo);

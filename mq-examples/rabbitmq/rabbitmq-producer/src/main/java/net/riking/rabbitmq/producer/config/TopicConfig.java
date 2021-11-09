@@ -1,6 +1,10 @@
 package net.riking.rabbitmq.producer.config;
 
-import org.springframework.amqp.core.*;
+import net.riking.rabbitmq.enums.QueueEnum;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -11,45 +15,49 @@ import org.springframework.stereotype.Component;
 @Component
 public class TopicConfig {
 
-    // 交换机名称-主题交换机
-    public  final static String EXCHANGE_NAME = "topicExchange";
-
-    // 队列名称
-    private  final static String  TOPIC_RETRY_ERROR_QUEUE   = "topic.retry.error";
-
-    // 队列名称
-    private  final static String  TOPIC_RETRY_INFO_QUEUE   = "topic.retry.info";
-
 
     // 1.交换机
     @Bean
-    TopicExchange topicExchange(){
-        return  new TopicExchange(EXCHANGE_NAME);
+    TopicExchange topicExchange() {
+        return new TopicExchange(QueueEnum.TOPIC_ERROR_QUEUE.getExchange());
     }
 
     // 2.队列
     @Bean
     public Queue topicQueueRetryError() {
-        return new Queue(TOPIC_RETRY_ERROR_QUEUE);
+        return new Queue(QueueEnum.TOPIC_ERROR_QUEUE.getQueue());
     }
 
     // 2.队列
     @Bean
     public Queue topicQueueRetryInfo() {
-        return new Queue(TOPIC_RETRY_INFO_QUEUE);
+        return new Queue(QueueEnum.TOPIC_INFO_QUEUE.getQueue());
+    }
+
+
+    // 2.队列
+    @Bean
+    public Queue topicQueue() {
+        return new Queue(QueueEnum.TOPIC_QUEUE.getQueue());
     }
 
 
     // 3.队列与交换机绑定
     @Bean
-    Binding bindingExchangeRetryErrot(Queue topicQueueRetryError, TopicExchange topicExchange) {
-        return  BindingBuilder.bind(topicQueueRetryError).to(topicExchange).with("topic.routingKey.retry.*");
+    Binding bindingTopicExchangeRetryError(Queue topicQueueRetryError, TopicExchange topicExchange) {
+        return BindingBuilder.bind(topicQueueRetryError).to(topicExchange).with(QueueEnum.TOPIC_ERROR_QUEUE.getRoutingKey());
     }
 
     // 3.队列与交换机绑定
     @Bean
-    Binding bindingExchangeRetryInfo(Queue topicQueueRetryInfo, TopicExchange topicExchange) {
-        return  BindingBuilder.bind(topicQueueRetryInfo).to(topicExchange).with("topic.routingKey.retry.#");
+    Binding bindingTopicExchangeRetryInfo(Queue topicQueueRetryInfo, TopicExchange topicExchange) {
+        return BindingBuilder.bind(topicQueueRetryInfo).to(topicExchange).with(QueueEnum.TOPIC_INFO_QUEUE.getRoutingKey());
+    }
+
+    // 3.队列与交换机绑定
+    @Bean
+    Binding bindingTopicExchange(Queue topicQueue, TopicExchange topicExchange) {
+        return BindingBuilder.bind(topicQueue).to(topicExchange).with(QueueEnum.TOPIC_QUEUE.getRoutingKey());
     }
 
 }
