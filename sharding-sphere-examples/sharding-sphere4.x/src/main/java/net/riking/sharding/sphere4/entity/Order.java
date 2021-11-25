@@ -17,7 +17,6 @@ import java.math.BigDecimal;
  */
 @TableName("t_order")
 @Data
-@Builder
 public class Order implements Serializable {
 
     private static final long serialVersionUID = 1L;

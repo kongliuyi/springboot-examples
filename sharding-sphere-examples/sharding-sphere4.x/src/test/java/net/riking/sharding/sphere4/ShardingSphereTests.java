@@ -13,6 +13,7 @@ import net.riking.sharding.sphere4.service.CustomerService;
 import net.riking.sharding.sphere4.service.IConfigService;
 import net.riking.sharding.sphere4.service.IOrderItemService;
 import net.riking.sharding.sphere4.service.IOrderService;
+import org.apache.shardingsphere.api.hint.HintManager;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -149,6 +150,25 @@ public class ShardingSphereTests {
         configService.save(Config.builder().createTime(LocalDateTime.now()).remark("测试")
                 .lastModifyTime(LocalDateTime.now()).build());
     }
+
+
+
+    /**
+     *
+     * 强制走主库
+     *
+     */
+    @Test
+    public void masterRouteOnly() {
+        // 强制走主库
+        HintManager.getInstance().setMasterRouteOnly();
+        this.selectOrderPage();
+        // 清除强制配置
+        HintManager.clear();
+        System.out.println("----------    分割线   --------");
+        this.selectInCustomer();
+    }
+
 
 
 }

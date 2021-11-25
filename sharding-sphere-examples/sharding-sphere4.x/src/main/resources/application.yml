@@ -1,7 +1,7 @@
 spring:
   shardingsphere:
     datasource:
-      names: master0,master1,slave0
+      names: master0,master1,slave0,slave1
       master0:
         driver-class-name: com.mysql.cj.jdbc.Driver
         jdbc-url: jdbc:mysql://106.14.47.185:3307/db0?useUnicode=true&characterEncoding=utf8&autoReconnectForPools=true&useSSL=false
@@ -41,7 +41,8 @@ spring:
         - t_order,t_order_item
       tables:
         t_order:
-          actual-data-nodes: master$->{0..1}.t_order_$->{0..2}
+          # 真实数据节点，没有配置读写分离由数据源名 + 表名组成， 否则由 master-slave-rules 中库别名 + 表名组成，以小数点分隔。多个表以逗号分隔，
+          actual-data-nodes: db$->{0..1}.t_order_$->{0..2}
           # 键值生产策略
           key-generator:
             # 自增主键字段
@@ -60,13 +61,13 @@ spring:
           database-strategy:
             # 行表达式分片策略
             inline:
-              # 分片算法表达式
-              algorithm-expression: master$->{order_id % 2}
+              # 分片算法表达式， 没有配置读写分离取数据源名， 否则取 master-slave-rules 中库别名
+              algorithm-expression: db$->{order_id % 2}
               # 分库分片健
               sharding-column: order_id
 
         t_order_item:
-          actual-data-nodes: master$->{0..1}.t_order_item_$->{0..2}
+          actual-data-nodes: db$->{0..1}.t_order_item_$->{0..2}
           # 键值生产策略
           key-generator:
             # 自增主键字段
@@ -86,13 +87,13 @@ spring:
             # 行表达式分片策略
            inline:
              # 分片算法表达式
-             algorithm-expression: master$->{order_id % 2}
+             algorithm-expression: db$->{order_id % 2}
              # 分库分片健
              sharding-column: order_id
 
         customer:
-          # 真实数据节点，由数据源名 + 表名组成，以小数点分隔。多个表以逗号分隔
-          actual-data-nodes: master$->{0..1}.customer_0$->{1..3}
+          # 真实数据节点，没有配置读写分离由数据源名 + 表名组成， 否则由 master-slave-rules 中库别名 + 表名组成，以小数点分隔。多个表以逗号分隔，
+          actual-data-nodes: db$->{0..1}.customer_0$->{1..3}
           key-generator:
             column: id
             type: SNOWFLAKE
@@ -121,14 +122,14 @@ spring:
       # 主从规则配置
       master-slave-rules:
         # 数据库名称或者别名，需要和 actual-data-nodes = master$  中的  master 保持一致
-        master0:
+        db0:
           # 主库
           master-data-source-name: master0
           # 从库，可设多个，Java 接收是 list 集合
           slave-data-source-names: slave0
           # 主从规则轮询, 只有一个从库，轮询没啥用吧
           load-balance-algorithm-type: round_robin
-        master1:
+        db1:
           master-data-source-name: master1
           slave-data-source-names: slave1
           # 主从规则轮询
