@@ -15,6 +15,7 @@
         <module>swagger-examples</module>
         <module>mybatis-examples</module>
         <module>websocket-echarts-examples</module>
+        <module>sharding-sphere-examples</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -1,0 +1,156 @@
+spring:
+  shardingsphere:
+    datasource:
+      names: master0,master1,slave0
+      master0:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://106.14.47.185:3307/db0?useUnicode=true&characterEncoding=utf8&autoReconnectForPools=true&useSSL=false
+        username: root
+        password: root123
+        type: com.zaxxer.hikari.HikariDataSource
+      master1:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://106.14.47.185:3307/db1?useUnicode=true&characterEncoding=utf8&autoReconnectForPools=true&useSSL=false
+        username: root
+        password: root123
+        type: com.zaxxer.hikari.HikariDataSource
+      slave0:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://106.14.47.185:3306/db0?useUnicode=true&characterEncoding=utf8&autoReconnectForPools=true&useSSL=false
+        username: root
+        password: root123
+        type: com.zaxxer.hikari.HikariDataSource
+      slave1:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://106.14.47.185:3306/db1?useUnicode=true&characterEncoding=utf8&autoReconnectForPools=true&useSSL=false
+        username: root
+        password: root123
+        type: com.zaxxer.hikari.HikariDataSource
+
+    # 启用 sharding-jdbc (可查看 SpringBootConfiguration.class)
+    enabled: true
+    props:
+      sql:
+        show: true
+    # 分片
+    sharding:
+      # 配置广播表
+      broadcast-tables: t_config
+      # 绑定表关系
+      binding-tables:
+        - t_order,t_order_item
+      tables:
+        t_order:
+          actual-data-nodes: master$->{0..1}.t_order_$->{0..2}
+          # 键值生产策略
+          key-generator:
+            # 自增主键字段
+            column: order_id
+            # 自增主键ID 生成方案
+            type: SNOWFLAKE
+          # 分表分片策略
+          table-strategy:
+            # 行表达式分片策略
+            inline:
+              # 分片算法表达式
+              algorithm-expression: t_order_$->{order_id % 3}
+              # 分片键
+              sharding-column: order_id
+          # 分库分片策略
+          database-strategy:
+            # 行表达式分片策略
+            inline:
+              # 分片算法表达式
+              algorithm-expression: master$->{order_id % 2}
+              # 分库分片健
+              sharding-column: order_id
+
+        t_order_item:
+          actual-data-nodes: master$->{0..1}.t_order_item_$->{0..2}
+          # 键值生产策略
+          key-generator:
+            # 自增主键字段
+            column: item_id
+            # 自增主键ID 生成方案
+            type: SNOWFLAKE
+          # 分表分片策略
+          table-strategy:
+            # 行表达式分片策略
+            inline:
+              # 分片算法表达式
+              algorithm-expression: t_order_item_$->{order_id % 3}
+              # 分片键
+              sharding-column: order_id
+                # 分库分片策略
+          database-strategy:
+            # 行表达式分片策略
+           inline:
+             # 分片算法表达式
+             algorithm-expression: master$->{order_id % 2}
+             # 分库分片健
+             sharding-column: order_id
+
+        customer:
+          # 真实数据节点，由数据源名 + 表名组成，以小数点分隔。多个表以逗号分隔
+          actual-data-nodes: master$->{0..1}.customer_0$->{1..3}
+          key-generator:
+            column: id
+            type: SNOWFLAKE
+          # 表分片策略
+          table-strategy:
+            # 标准分片策略
+            standard:
+              # 自定义精确分片算法
+              precise-algorithm-class-name: net.riking.sharding.sphere4.algorithm.PreciseShardingTableAlgorithm
+              # 自定义范围分片算法
+              range-algorithm-class-name: net.riking.sharding.sphere4.algorithm.RangeShardingTableAlgorithm
+              # 分片键
+              sharding-column: id
+          # 库分片策略
+          database-strategy:
+            # 标准分片策略
+            standard:
+              # 自定义精确分片算法
+              precise-algorithm-class-name: net.riking.sharding.sphere4.algorithm.PreciseShardingDBAlgorithm
+              # 自定义范围分片算法
+              range-algorithm-class-name: net.riking.sharding.sphere4.algorithm.RangeShardingDBAlgorithm
+              # 分片键
+              sharding-column: id
+
+
+      # 主从规则配置
+      master-slave-rules:
+        # 数据库名称或者别名，需要和 actual-data-nodes = master$  中的  master 保持一致
+        master0:
+          # 主库
+          master-data-source-name: master0
+          # 从库，可设多个，Java 接收是 list 集合
+          slave-data-source-names: slave0
+          # 主从规则轮询, 只有一个从库，轮询没啥用吧
+          load-balance-algorithm-type: round_robin
+        master1:
+          master-data-source-name: master1
+          slave-data-source-names: slave1
+          # 主从规则轮询
+          load-balance-algorithm-type: round_robin
+
+    # 只有主从，没有分片--- 看源码得出，没有实际操作过
+    #masterslave:
+    #  name: db_master0_slave0
+    # 主从规则轮询
+    #  load-balance-algorithm-type: round_robin
+    #  master-data-source-name: master0
+    #  slave-data-source-names: slave0
+
+
+# 输出日志
+logging:
+  level:
+    net:
+      riking:
+        sharding:
+          sphere4:
+            mapper: trace
+mybatis-plus:
+  mapper-locations: mapper/**.xml
+
