@@ -14,6 +14,8 @@ import net.riking.sharding.sphere4.service.IConfigService;
 import net.riking.sharding.sphere4.service.IOrderItemService;
 import net.riking.sharding.sphere4.service.IOrderService;
 import org.apache.shardingsphere.api.hint.HintManager;
+import org.apache.shardingsphere.transaction.annotation.ShardingTransactionType;
+import org.apache.shardingsphere.transaction.core.TransactionType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -162,13 +164,50 @@ public class ShardingSphereTests {
     public void masterRouteOnly() {
         // 强制走主库
         HintManager.getInstance().setMasterRouteOnly();
-        this.selectOrderPage();
+        this.selectInCustomer();
+
+        this.selectInCustomer();
         // 清除强制配置
         HintManager.clear();
         System.out.println("----------    分割线   --------");
         this.selectInCustomer();
     }
 
+
+    /**
+     *
+     * 强制走主库
+     *
+     */
+    @Test
+   // @Transactional
+    public void masterRouteOnly2() {
+        // 强制走主库
+        HintManager.getInstance().setMasterRouteOnly();
+        QueryWrapper<Customer> qw = new QueryWrapper<>();
+        qw.in("id", 1463341470996299783L, 1463341470929190913L);
+        List<Customer> customerList = customerService.list(qw);
+        List<Customer> customerList2 = customerService.list(qw);
+        System.out.println(customerList.toString());
+    }
+
+
+    /**
+     *
+     * 强制走主库
+     *
+     */
+    @Test
+    @Transactional(rollbackFor = Exception.class)
+    // // 支持TransactionType.LOCAL, TransactionType.XA, TransactionType.BASE
+    @ShardingTransactionType(TransactionType.XA)
+    @Rollback(false)
+    public void shardingTransaction() {
+
+       this.saveOrder();
+
+       throw  new RuntimeException();
+    }
 
 
 }

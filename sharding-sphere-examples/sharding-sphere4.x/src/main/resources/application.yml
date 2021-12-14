@@ -4,13 +4,13 @@ spring:
       names: master0,master1,slave0,slave1
       master0:
         driver-class-name: com.mysql.cj.jdbc.Driver
-        jdbc-url: jdbc:mysql://106.14.47.185:3307/db0?useUnicode=true&characterEncoding=utf8&autoReconnectForPools=true&useSSL=false
+        jdbc-url: jdbc:mysql://106.14.47.185:3307/db0?useUnicode=true&characterEncoding=utf8&autoReconnectForPools=true&useSSL=false&useServerPrepStmts=true
         username: root
         password: root123
         type: com.zaxxer.hikari.HikariDataSource
       master1:
         driver-class-name: com.mysql.cj.jdbc.Driver
-        jdbc-url: jdbc:mysql://106.14.47.185:3307/db1?useUnicode=true&characterEncoding=utf8&autoReconnectForPools=true&useSSL=false
+        jdbc-url: jdbc:mysql://106.14.47.185:3307/db1?useUnicode=true&characterEncoding=utf8&autoReconnectForPools=true&useSSL=false&useServerPrepStmts=true
         username: root
         password: root123
         type: com.zaxxer.hikari.HikariDataSource
